@@ -1,0 +1,17 @@
+{
+  "name": "skifeet-stathat",
+  "version": "1.0.0",
+  "description": "pipe cloudwatch logs stats to stathat",
+  "main": "index.js",
+  "dependencies": {
+    "lodash": "^4.17.10",
+    "readline": "^1.3.0",
+    "stathat": "0.0.8"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "lasha",
+  "license": "ISC"
+}
