@@ -10,8 +10,8 @@
   },
   "devDependencies": {},
   "scripts": {
-    "test": "awslogs get production-aaptiv.com ALL --watch | node index.js WSF",
-    "migrate": "awslogs get /ecs/Scheduled_identityServiceUserMigration ALL --watch | node index.js MIGRATE"
+    "test": "awslogs get production-aaptiv.com ALL --watch | n use 8.9.4 index.js WSF",
+    "migrate": "awslogs get /ecs/Scheduled_identityServiceUserMigration ALL --watch | n use 8.9.4 index.js MIGRATE"
   },
   "author": "lasha",
   "license": "ISC"

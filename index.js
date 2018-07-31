@@ -38,15 +38,15 @@ const logValue = (logString, value) => {
 }
 
 const isIncrementStat = (line) => {
-  return baseChecker(constants[process.argv.slice(2)[0]].INCREMENT, line)
+  return baseChecker(constants[process.argv.slice(4)[0]].INCREMENT, line)
 }
 
 const isTimingStat = (line) => {
-  return baseChecker(constants[process.argv.slice(2)[0]].TIMING, line)
+  return baseChecker(constants[process.argv.slice(4)[0]].TIMING, line)
 }
 
 const isRequestStat = (line) => {
-  return baseChecker(constants[process.argv.slice(2)[0]].REQUESTS, line)
+  return baseChecker(constants[process.argv.slice(4)[0]].REQUESTS, line)
 }
 
 const baseChecker = (constantType, line) => {
@@ -85,8 +85,8 @@ const baseChecker = (constantType, line) => {
 
 const logIncrementStat = (line) => {
   split = line.split(' ')
-  const statName = constants[process.argv.slice(2)[0]].INCREMENT.STATNAME(line)
-  const count = constants[process.argv.slice(2)[0]].INCREMENT.COUNT(line)
+  const statName = constants[process.argv.slice(4)[0]].INCREMENT.STATNAME(line)
+  const count = constants[process.argv.slice(4)[0]].INCREMENT.COUNT(line)
   console.log('JEFF', statName, count)
   logCount(statName, count)
 }
