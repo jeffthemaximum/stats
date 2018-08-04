@@ -1,7 +1,7 @@
 const readline = require('readline')
 const _ = require('lodash')
 const stathat = require('stathat')
-stathat.useHTTPS = true
+const axios = require('axios')
 
 const config = require('./config')
 const constants = require('./constants/index')
@@ -27,14 +27,20 @@ const flushStats = () => {
   STAT_QUEUE = []
   if (cachedQueue.length > 0) {
     console.log(cachedQueue)
-    stathat._postRequest(
-      '/ez',
-      {
-        ezkey: stathatKey,
-        data: cachedQueue
-      },
-      logCallback
-    )
+    data = {
+      ezkey: stathatKey,
+      data: cachedQueue
+    }
+    axios.post('http://api.stathat.com/ez', data, {
+      'Content-Type': 'application/json'
+    })
+    .then(function (response) {
+      const { data } = response
+      console.log({data})
+    })
+    .catch(function (error) {
+      console.log({error})
+    })
   }
 }
 
