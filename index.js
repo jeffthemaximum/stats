@@ -17,15 +17,16 @@ const STAT_FAMILY = constants[process.argv.slice(2)[0]]
 let STAT_QUEUE = []
 
 const logCallback = (status, json) => {
-
+  console.log({status})
+  console.log({json})
 }
 
 const flushStats = () => {
-  console.log(STAT_QUEUE)
   console.log('STAT_QUEUE length', STAT_QUEUE.length)
   cachedQueue = STAT_QUEUE
   STAT_QUEUE = []
-  if (STAT_QUEUE.length > 0) {
+  if (cachedQueue.length > 0) {
+    console.log(cachedQueue)
     stathat._postRequest('/ez', cachedQueue, logCallback)
   }
 }
