@@ -27,7 +27,14 @@ const flushStats = () => {
   STAT_QUEUE = []
   if (cachedQueue.length > 0) {
     console.log(cachedQueue)
-    stathat._postRequest('/ez', cachedQueue, logCallback)
+    stathat._postRequest(
+      '/ez',
+      {
+        ezkey: stathatKey,
+        data: cachedQueue
+      },
+      logCallback
+    )
   }
 }
 
