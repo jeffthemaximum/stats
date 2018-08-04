@@ -12,7 +12,7 @@
   "devDependencies": {},
   "scripts": {
     "web": "awslogs get production-aaptiv.com ALL --watch | n use 8.9.4 index.js WSF",
-    "migrate": "awslogs get /ecs/Scheduled_identityServiceUserMigration_2 ALL --watch | n use 8.9.4 index.js MIGRATE"
+    "migrate": "awslogs get /ecs/Scheduled_identityServiceUserMigration_2 ALL --watch | n use 8.9.4 index.js MIGRATION"
   },
   "author": "lasha",
   "license": "ISC"
