@@ -13,40 +13,33 @@ const rl = readline.createInterface({
 })
 
 const stathatKey = config.STATHAT.KEY
+const STAT_FAMILY = constants[process.argv.slice(2)[0]]
+let STAT_QUEUE = []
 
 const logCallback = (status, json) => {
 
 }
 
-const logCount = (logString, count = 1) => {
-  stathat.trackEZCount(
-    stathatKey,
-    logString,
-    count,
-    logCallback
-  )
-  console.log(`${Date()} stat: ${logString} count: ${count}`)
-}
-
-const logValue = (logString, value) => {
-  stathat.trackEZValue(
-    stathatKey,
-    logString,
-    count,
-    logCallback
-  )
+const flushStats = () => {
+  console.log(STAT_QUEUE)
+  console.log('STAT_QUEUE length', STAT_QUEUE.length)
+  cachedQueue = STAT_QUEUE
+  STAT_QUEUE = []
+  if (STAT_QUEUE.length > 0) {
+    stathat._postRequest('/ez', cachedQueue, logCallback)
+  }
 }
 
 const isIncrementStat = (line) => {
-  return baseChecker(constants[process.argv.slice(2)[0]].INCREMENT, line)
+  return baseChecker(STAT_FAMILY.INCREMENT, line)
 }
 
 const isTimingStat = (line) => {
-  return baseChecker(constants[process.argv.slice(2)[0]].TIMING, line)
+  return baseChecker(STAT_FAMILY.TIMING, line)
 }
 
 const isRequestStat = (line) => {
-  return baseChecker(constants[process.argv.slice(2)[0]].REQUESTS, line)
+  return baseChecker(STAT_FAMILY.REQUESTS, line)
 }
 
 const baseChecker = (constantType, line) => {
@@ -85,10 +78,9 @@ const baseChecker = (constantType, line) => {
 
 const logIncrementStat = (line) => {
   split = line.split(' ')
-  const statName = constants[process.argv.slice(2)[0]].INCREMENT.STATNAME(line)
-  const count = constants[process.argv.slice(2)[0]].INCREMENT.COUNT(line)
-  console.log('JEFF', statName, count)
-  logCount(statName, count)
+  const statName = STAT_FAMILY.INCREMENT.STATNAME(line)
+  const count = STAT_FAMILY.INCREMENT.COUNT(line)
+  enqueueCountStat(statName, count)
 }
 
 const logTimingStat = (line) => {
@@ -96,7 +88,23 @@ const logTimingStat = (line) => {
 }
 
 const logRequestStat = (line) => {
-  logCount('page view')
+  enqueueCountStat('page view')
+}
+
+const enqueueCountStat = (stat, count = 1) => {
+  stat = {
+    stat,
+    count
+  }
+  STAT_QUEUE.push(stat)
+}
+
+const enqueueValueStat = (stat, value) => {
+  stat = {
+    stat,
+    value
+  }
+  STAT_QUEUE.push(stat)
 }
 
 
@@ -111,5 +119,6 @@ rl.on('line', (line) => {
 console.log({config})
 console.log(stathatKey)
 
+setInterval(flushStats, 5000)
 
 // get running on DO droplet
