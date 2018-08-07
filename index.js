@@ -14,12 +14,8 @@ const rl = readline.createInterface({
 
 const stathatKey = config.STATHAT.KEY
 const STAT_FAMILY = constants[process.argv.slice(2)[0]]
+console.log({STAT_FAMILY})
 let STAT_QUEUE = []
-
-const logCallback = (status, json) => {
-  console.log({status})
-  console.log({json})
-}
 
 const flushStats = () => {
   console.log('STAT_QUEUE length', STAT_QUEUE.length)
@@ -91,14 +87,15 @@ const baseChecker = (constantType, line) => {
 }
 
 const logIncrementStat = (line) => {
-  split = line.split(' ')
   const statName = STAT_FAMILY.INCREMENT.STATNAME(line)
   const count = STAT_FAMILY.INCREMENT.COUNT(line)
   enqueueCountStat(statName, count)
 }
 
 const logTimingStat = (line) => {
-
+  const statName = STAT_FAMILY.TIMING.STATNAME(line)
+  const value = STAT_FAMILY.TIMING.VALUE(line)
+  enqueueValueStat(statName, value)
 }
 
 const logRequestStat = (line) => {
@@ -127,6 +124,8 @@ rl.on('line', (line) => {
     logRequestStat(line)
   } else if (isIncrementStat(line)) {
     logIncrementStat(line)
+  } else if (isTimingStat(line)) {
+    logTimingStat(line)
   }
 })
 
