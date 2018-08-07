@@ -91,7 +91,7 @@ const constants = {
         const baseStatName = splitLine.split("'message': ")[1].split(' ')[1].substring(2, splitLine.length).replace("\',);", '')
         const rawTagsDict = splitLine.split("'message': ")[1].split("tags_dict': ")[1]
         const tagsDict = JSON.parse(rawTagsDict.substring(0, rawTagsDict.length -3).replace(/'/g, '"'))
-        const tagsDictKeys = Object.keys(tagsDict).join('.')
+        const tagsDictKeys = Object.values(tagsDict).join('.')
         return `identityservice.${baseStatName}.${tagsDictKeys}`
       },
       COUNT: (line) => {
