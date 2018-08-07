@@ -87,9 +87,8 @@ const constants = {
       YES: ["'stats.increment;"],
       NO: [],
       STATNAME: (line) => {
-        console.log(line)
         const splitLine = line.split('INFO: ')[1]
-        const baseStatName = splitLine.split("'message': ")[1].split(' ')[1].substring(2, splitLine.length).replace("\',);", '')
+        const baseStatName = splitLine.split("'message': ")[1].split(' ')[1].replace(/[^\w.]+/g, "");
         const rawTagsDict = splitLine.split("'message': ")[1].split("tags_dict': ")[1]
         let tagsDictKeys
         if (rawTagsDict) {
