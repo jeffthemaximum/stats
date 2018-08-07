@@ -76,7 +76,7 @@ const constants = {
       YES: ["'stats.timer;"],
       NO: [],
       STATNAME: (line) => {
-        return `identityservice.timing.${line.split("'stats.timer; ")[1].split(' ')[0].replace(';', "'").replace("\'", "")}`
+        return `timing.identityservice.${line.split("'stats.timer; ")[1].split(' ')[0].replace(';', "'").replace("\'", "")}`
       },
       VALUE: (line) => {
         return Number(line.split("'stats.timer; ")[1].split(' ')[1].replace(';', "'").replace("\'", ""))
