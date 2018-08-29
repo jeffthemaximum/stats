@@ -74,7 +74,7 @@ const constants = {
     TIMING: {
       ENABLED: true,
       YES: ["'stats.timer;"],
-      NO: ["/health"],
+      NO: ["ELB-HealthChecker"],
       STATNAME: (line) => {
         return `timing.identityservice.${line.split("'stats.timer; ")[1].split(' ')[0].replace(';', "'").replace("\'", "")}`
       },
@@ -85,7 +85,7 @@ const constants = {
     INCREMENT: {
       ENABLED: true,
       YES: ["'stats.increment;"],
-      NO: ["/health"],
+      NO: ["ELB-HealthChecker"],
       STATNAME: (line) => {
         const splitLine = line.split('INFO: ')[1]
         const baseStatName = splitLine.split("'message': ")[1].split(' ')[1].replace(/[^\w.]+/g, "");
