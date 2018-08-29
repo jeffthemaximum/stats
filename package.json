@@ -13,7 +13,7 @@
   "scripts": {
     "web": "awslogs get production-aaptiv.com ALL --watch | n use 8.9.4 index.js WSF",
     "migrate": "awslogs get /ecs/Scheduled_identityServiceUserMigration_2 ALL --watch | n use 8.9.4 index.js MIGRATION",
-    "is-staging": "awslogs get staging-identityservice-staging ALL --watch | n use 8.9.4 index.js IDENTITY"
+    "is-staging": "awslogs get staging-identityservice-staging ALL --watch | node index.js IDENTITY"
   },
   "author": "lasha",
   "license": "ISC"
