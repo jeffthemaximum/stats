@@ -87,15 +87,23 @@ const baseChecker = (constantType, line) => {
 }
 
 const logIncrementStat = (line) => {
-  const statName = STAT_FAMILY.INCREMENT.STATNAME(line)
-  const count = STAT_FAMILY.INCREMENT.COUNT(line)
-  enqueueCountStat(statName, count)
+  try {
+    const statName = STAT_FAMILY.INCREMENT.STATNAME(line)
+    const count = STAT_FAMILY.INCREMENT.COUNT(line)
+    enqueueCountStat(statName, count)
+  } catch (e) {
+    console.log(e)
+  }
 }
 
 const logTimingStat = (line) => {
-  const statName = STAT_FAMILY.TIMING.STATNAME(line)
-  const value = STAT_FAMILY.TIMING.VALUE(line)
-  enqueueValueStat(statName, value)
+  try {
+    const statName = STAT_FAMILY.TIMING.STATNAME(line)
+    const value = STAT_FAMILY.TIMING.VALUE(line)
+    enqueueValueStat(statName, value)
+  } catch (e) {
+    console.log(e)
+  }
 }
 
 const logRequestStat = (line) => {
