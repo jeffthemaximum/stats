@@ -1,6 +1,8 @@
 const constants = {
   WSF: {
+    NAME: 'prod-webskyfit-prod',
     PREFACE: '',
+    EMPTY_STAT_INTERVAL: 10,
     REQUESTS: {
       ENABLED: true,
       YES: [
@@ -12,7 +14,6 @@ const constants = {
         '/api'
       ]
     },
-
     INCREMENT: {
       ENABLED: true,
       YES: [
@@ -34,38 +35,9 @@ const constants = {
       NO: []
     }
   },
-  MIGRATION: {
-    PREFACE: '',
-    REQUESTS: {
-      ENABLED: false,
-      YES: [],
-      NO: []
-    },
-    TIMING: {
-      ENABLED: false,
-      YES: [],
-      NO: []
-    },
-    INCREMENT: {
-      ENABLED: true,
-      YES: [
-        'info:',
-        'migrating',
-        'user',
-        'id:',
-        'email:'
-      ],
-      NO: [],
-      STATNAME: (line) => {
-        const split = line.split(' ')
-        return `${split[3]}.${split[4]}`
-      },
-      COUNT: (line) => {
-        return 1
-      }
-    },
-  },
   IDENTITY: {
+    NAME: 'staging-identityservice-staging',
+    EMPTY_STAT_INTERVAL: 10,
     REQUESTS: {
       ENABLED: false,
       YES: [],
@@ -87,12 +59,13 @@ const constants = {
       YES: ["'stats.increment;"],
       NO: ["ELB-HealthChecker"],
       STATNAME: (line) => {
-        const splitLine = line.split('INFO: ')[1]
+        const splitLine = line.substring(0, line.indexOf('\n')).split('INFO: ')[1]
         const baseStatName = splitLine.split("'message': ")[1].split(' ')[1].replace(/[^\w.]+/g, "");
-        const rawTagsDict = splitLine.split("'message': ")[1].split("tags_dict': ")[1]
+        let rawTagsDict = splitLine.split("'message': ")[1].split("tags_dict': ")[1]
         let tagsDictKeys
         if (rawTagsDict) {
-          const tagsDict = JSON.parse(rawTagsDict.substring(0, rawTagsDict.length -3).replace(/'/g, '"'))
+          rawTagsDict = rawTagsDict.substring(0, rawTagsDict.length - 3).replace(/'/g, '"')
+          const tagsDict = JSON.parse(rawTagsDict)
           tagsDictKeys = Object.values(tagsDict).join('.')
         }
         return `identityservice.${baseStatName}.${tagsDictKeys}`
@@ -101,8 +74,38 @@ const constants = {
         return 1
       }
     },
-  }
-
+  },
+  // MIGRATION: {
+  //   PREFACE: '',
+  //   REQUESTS: {
+  //     ENABLED: false,
+  //     YES: [],
+  //     NO: []
+  //   },
+  //   TIMING: {
+  //     ENABLED: false,
+  //     YES: [],
+  //     NO: []
+  //   },
+  //   INCREMENT: {
+  //     ENABLED: true,
+  //     YES: [
+  //       'info:',
+  //       'migrating',
+  //       'user',
+  //       'id:',
+  //       'email:'
+  //     ],
+  //     NO: [],
+  //     STATNAME: (line) => {
+  //       const split = line.split(' ')
+  //       return `${split[3]}.${split[4]}`
+  //     },
+  //     COUNT: (line) => {
+  //       return 1
+  //     }
+  //   },
+  // },
 }
 
 module.exports = constants
