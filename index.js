@@ -22,24 +22,24 @@ const flushStats = () => {
   console.log('STAT_QUEUE length', STAT_QUEUE.length)
   cachedQueue = STAT_QUEUE
   STAT_QUEUE = []
-  const data = {}
-  // if (cachedQueue.length > 0) {
-  //   console.log(cachedQueue)
-  //   data = {
-  //     ezkey: stathatKey,
-  //     data: cachedQueue
-  //   }
-  //   axios.post('http://api.stathat.com/ez', data, {
-  //     'Content-Type': 'application/json'
-  //   })
-  //   .then(function (response) {
-  //     const { data } = response
-  //     console.log({data})
-  //   })
-  //   .catch(function (error) {
-  //     console.log({error})
-  //   })
-  // } else if (STAT_FAMILY.EMPTY_STAT_INTERVAL) {
+  let data = {}
+  if (cachedQueue.length > 0) {
+    console.log(cachedQueue)
+    data = {
+      ezkey: stathatKey,
+      data: cachedQueue
+    }
+    axios.post('http://api.stathat.com/ez', data, {
+      'Content-Type': 'application/json'
+    })
+    .then(function (response) {
+      const { data } = response
+      console.log({data})
+    })
+    .catch(function (error) {
+      console.log({error})
+    })
+  } else if (STAT_FAMILY.EMPTY_STAT_INTERVAL) {
     ACCEPTABLE_EMPTY_STAT_INTERVAL += 1
     console.log({ACCEPTABLE_EMPTY_STAT_INTERVAL})
     console.log({'STAT_FAMILY.EMPTY_STAT_INTERVAL': STAT_FAMILY.EMPTY_STAT_INTERVAL})
@@ -55,13 +55,13 @@ const flushStats = () => {
       .then(function (response) {
         const { data } = response
         console.log({data})
-        throw new Error('awslogs needs a restart')
+        // throw new Error('awslogs needs a restart')
         process.exit(1)
         child.kill()
       })
       .catch(function (error) {
         console.log({error})
-        throw new Error('awslogs needs a restart')
+        // throw new Error('awslogs needs a restart')
         process.exit(1)
         child.kill()
       })
@@ -180,6 +180,12 @@ child.on('close', function (code) {
 
 child.on('error', function (code) {
   console.log('child process errored with code ' + code)
+  process.exit(1)
+  child.kill()
+})
+
+child.on('SIGQUIT', function() {
+  console.log('child quit errored with code ' + code)
   process.exit(1)
   child.kill()
 })
