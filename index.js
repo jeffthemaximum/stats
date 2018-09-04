@@ -66,7 +66,7 @@ const flushStats = () => {
         child.kill()
       })
     }
-  // }
+  }
 }
 
 const isIncrementStat = (line) => {
