@@ -22,25 +22,27 @@ const flushStats = () => {
   console.log('STAT_QUEUE length', STAT_QUEUE.length)
   cachedQueue = STAT_QUEUE
   STAT_QUEUE = []
-  ACCEPTABLE_EMPTY_STAT_INTERVAL = 0
-  if (cachedQueue.length > 0) {
-    console.log(cachedQueue)
-    data = {
-      ezkey: stathatKey,
-      data: cachedQueue
-    }
-    axios.post('http://api.stathat.com/ez', data, {
-      'Content-Type': 'application/json'
-    })
-    .then(function (response) {
-      const { data } = response
-      console.log({data})
-    })
-    .catch(function (error) {
-      console.log({error})
-    })
-  } else if (STAT_FAMILY.EMPTY_STAT_INTERVAL) {
+  const data = {}
+  // if (cachedQueue.length > 0) {
+  //   console.log(cachedQueue)
+  //   data = {
+  //     ezkey: stathatKey,
+  //     data: cachedQueue
+  //   }
+  //   axios.post('http://api.stathat.com/ez', data, {
+  //     'Content-Type': 'application/json'
+  //   })
+  //   .then(function (response) {
+  //     const { data } = response
+  //     console.log({data})
+  //   })
+  //   .catch(function (error) {
+  //     console.log({error})
+  //   })
+  // } else if (STAT_FAMILY.EMPTY_STAT_INTERVAL) {
     ACCEPTABLE_EMPTY_STAT_INTERVAL += 1
+    console.log({ACCEPTABLE_EMPTY_STAT_INTERVAL})
+    console.log({'STAT_FAMILY.EMPTY_STAT_INTERVAL': STAT_FAMILY.EMPTY_STAT_INTERVAL})
     if (ACCEPTABLE_EMPTY_STAT_INTERVAL >= STAT_FAMILY.EMPTY_STAT_INTERVAL) {
       ACCEPTABLE_EMPTY_STAT_INTERVAL = 0
       data.data = [{
@@ -54,13 +56,17 @@ const flushStats = () => {
         const { data } = response
         console.log({data})
         throw new Error('awslogs needs a restart')
+        process.exit(1)
+        child.kill()
       })
       .catch(function (error) {
         console.log({error})
         throw new Error('awslogs needs a restart')
+        process.exit(1)
+        child.kill()
       })
     }
-  }
+  // }
 }
 
 const isIncrementStat = (line) => {
@@ -166,12 +172,16 @@ child.stdout.on('data', function (line) {
   processLine(line)
 })
 
-child.stderr.on('data', function (data) {
-  console.log('stderr: ' + data)
+child.on('close', function (code) {
+  console.log('child process closed with code ' + code)
+  process.exit(1)
+  child.kill()
 })
 
-child.on('close', function (code) {
-  console.log('child process exited with code ' + code)
+child.on('error', function (code) {
+  console.log('child process errored with code ' + code)
+  process.exit(1)
+  child.kill()
 })
 
 console.log({config})
