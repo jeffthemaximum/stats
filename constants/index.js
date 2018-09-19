@@ -16,7 +16,7 @@ const constants = {
       ]
     },
     INCREMENT: {
-      ENABLED: false,
+      ENABLED: true,
       YES: [
         'serverStatLoggingService.increment'
       ],
