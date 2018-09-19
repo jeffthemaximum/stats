@@ -29,16 +29,9 @@ const flushStats = () => {
       ezkey: stathatKey,
       data: cachedQueue
     }
-    axios.post('http://api.stathat.com/ez', data, {
-      'Content-Type': 'application/json'
-    })
-    .then(function (response) {
-      const { data } = response
-      console.log({data})
-    })
-    .catch(function (error) {
-      console.log({error})
-    })
+    // axios.post('http://api.stathat.com/ez', data, {
+    //   'Content-Type': 'application/json'
+    // })
   } else if (STAT_FAMILY.EMPTY_STAT_INTERVAL) {
     ACCEPTABLE_EMPTY_STAT_INTERVAL += 1
     console.log({ACCEPTABLE_EMPTY_STAT_INTERVAL})
@@ -118,8 +111,10 @@ const baseChecker = (constantType, line) => {
 const logIncrementStat = (line) => {
   try {
     const statName = STAT_FAMILY.INCREMENT.STATNAME(line)
-    const count = STAT_FAMILY.INCREMENT.COUNT(line)
-    enqueueCountStat(statName, count)
+    if (statName) {
+      const count = STAT_FAMILY.INCREMENT.COUNT(line)
+      enqueueCountStat(statName, count)
+    }
   } catch (e) {
     console.log(e)
   }
