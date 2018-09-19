@@ -29,9 +29,9 @@ const flushStats = () => {
       ezkey: stathatKey,
       data: cachedQueue
     }
-    // axios.post('http://api.stathat.com/ez', data, {
-    //   'Content-Type': 'application/json'
-    // })
+    axios.post('http://api.stathat.com/ez', data, {
+      'Content-Type': 'application/json'
+    })
   } else if (STAT_FAMILY.EMPTY_STAT_INTERVAL) {
     ACCEPTABLE_EMPTY_STAT_INTERVAL += 1
     console.log({ACCEPTABLE_EMPTY_STAT_INTERVAL})
